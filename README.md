@@ -1,4 +1,4 @@
-# Agave RStudio server
+# Agave RStudio Server
 
 Power your digital lab and reduce the time from theory to discovery using the
 Agave Science-as-a-Service API Platform. Agave provides hosted services that
@@ -7,12 +7,11 @@ results from anywhere at any time.
 
 ## Overview
 
-The Agave RStudio image is built from the popular
-[rocker/rstudio:3.4.3](https://hub.docker.com/r/rocker/rstudio/) image and
-extended with the Agave CLI, R and Python SKD, and several example notebooks.
+The Agave RStudio Server image is built from the popular
+[rocker/rstudio:3.4.3](https://hub.docker.com/r/rocker/rstudio/) image. The image is enhanced with preconfigured installation of the Agave [CLI](https://github.com/agaveplatform/agave-cli, Python ([agavepy](https://github.com/TACC/agavepy)) and R ([rAgave](https://github.com/agaveplatform/r-sdk)) SDK, and installers to automate the synchronization of notebooks from Agave's ["AP" series of tutorials](https://github.com/agaveplatform/notebooks).
 
 > For more
-information on customizing the RStudio environment can be found in their [Github repository](https://github.com/rocker-org/rocker/wiki/Using-the-RStudio-image).
+information on customizing the RStudio Server environment can be found in their [Github repository](https://github.com/rocker-org/rocker/wiki/Using-the-RStudio-image).
 
 ### Prerequisites
 
@@ -36,11 +35,11 @@ docker-compose build
 ## Using the image
 
 This repository includes a `docker-compose.yml` file, which will start up your
-RStudio server with some sensible defaults an create a persistent data volume
+RStudio Server with some sensible defaults an create a persistent data volume
 to preserve your session data to your docker host and make it available between
 runs.
 
-To start your RStudio server, run the following command from the repository root directory.
+To start your RStudio Server, run the following command from the repository root directory.
 cd to the project folder and
 
 ```bash
