@@ -1,0 +1,7 @@
+examples
+!examples/*-example.*
+.agave
+data
+cache
+archive
+*.proj

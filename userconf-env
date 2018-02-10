@@ -1,0 +1,34 @@
+#!/usr/bin/with-contenv sh
+
+AGAVE_VARS="$(env | grep '^AGAVE_')"
+
+# adjust user home if they are using a custom user
+USER_HOME=/home/rstudio
+if [ -n "$USER" ]; then
+  USER_HOME=/home/$USER
+fi
+
+# if there are Agave environment variables set,
+# clear all Agave environment variables from the
+# current ~/.Renviron file and add th ones
+# from their environment
+if [ -n "$AGAVE_VARS" ]; then
+  # if the file exists, clear out the old, add the new
+  if [ -e "$USER_HOME/.Renviron" ]; then
+    sed -i 's/^AGAVE.*//g' $USER_HOME/.Renviron
+  fi
+
+  echo "export USER_HOME=$USER_HOME"
+
+  touch $USER_HOME/.Renviron
+
+  for i in `env | grep '^AGAVE_'`; do
+    echo "export $i"
+    echo "$i" >> $USER_HOME/.Renviron
+  done
+
+  ls -al $USER_HOME/.Renviron
+
+else
+  echo "AGAVE_NOOP=1"
+fi

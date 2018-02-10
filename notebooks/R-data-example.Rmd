@@ -1,0 +1,99 @@
+---
+title: "Data Management With The Agave R SDK"
+output:
+  html_document:
+    df_print: paged
+---
+
+In this notebook, we introduce some basic data-centric use cases of the rAgave client SDK. The examples primarily focus on interactions with the the files and metadata services, but the concepts introduced are broadly applicable to all Agave services. For more information about the Agave Platform, please see the Agave developer site at http://docs.agaveplatform.org
+
+> If this is your first time using the Agave Platform or the rAgave client SDK, please see the [R-example.Rmd] notebook for short primer on authentication an obtaining you client keys.
+
+The rAgave library provides a high-level R binding to the Agave API. The first step is to import the Agave class:
+```{r}
+library("rAgave")
+```
+
+Because this tutorial builds on the basic introduction to the rAgave client SDK in the [R-example.Rmd] notebook, we will assume we already have a valid client and token cached locally. Thus, we will just initialize a new instance of `rAgave::Agave` and let it pull a refresh token and initialize our environment.
+
+```{r}
+api <-Agave$new(cacheDir="/home/rstudio/.cyverse",
+                responseType="df")
+```
+
+### Use case 1: Accessing remote data
+
+Agave's Files API gives you a protocol-agnostic way to interact with remote data sources through a single, common interface. Here we will look at how we can use rAgave to read an write data from multiple data sources and incorporate that new functionality into our existing work.
+
+```{r}
+api$logLevel <- FATAL
+files <- api$files$list(path = "dhbrand/ExampleData/DongWang", responseType="df")
+files
+
+```
+We can download the file by specifying th path to the file on the remote system.
+```{r}
+filepath <- api$files$download(path = "dhbrand/ExampleData/DongWang/dongwang.ped")
+filepath
+```
+
+Notice that we did not specify a local filename, so it maintained the current filename. We can download the file again, but if we don't specify the `overwrite=TRUE` argument, the download will fail.
+
+```{r}
+filepath <- api$files$download(path = "dhbrand/ExampleData/DongWang/dongwang.ped", overwrite=TRUE)
+```
+Sometimes you may not want to write the file to disk. In that situation, you can stream th file and send the steam to a callback function.
+
+```{r}
+devtools::install("/home/rstudio/rAgave")
+api <-Agave$new( baseUrl = myCreds[["AGAVE_BASE_URL"]],
+                username = myCreds[["AGAVE_USERNAME"]], 
+                password = myCreds[["AGAVE_PASSWORD"]],
+                cacheDir="/home/rstudio/.cyverse",
+                responseType="df",
+                logLevel=TRACE)
+myFunction <- function(x) {print(x)}
+myWriteStream=function(x) {
+   print(length(x))
+   length(x)
+ }
+resp <- api$files$readSteam(path = "dhbrand/ExampleData/DongWang/dongwang.ped", writeStream=function(x) {
+   print(length(x))
+   length(x)
+ })
+writeStream
+```
+
+
+
+```{r}
+
+h <- new_handle()
+handle_setheaders(h,
+  "Content-Type" = "text/all",
+  "Cache-Control" = "no-cache",
+  "User-Agent" = "A cow",
+  "Authorization" = "Bearer d937ece02aca77142ffe91485de324d"
+)
+df = read.csv(curl_fetch_stream('https://agave.iplantc.org/files/v2/media/dooley/conflicts_of_interest.csv', handle = h))
+df
+handle_reset(h)
+
+#print(req$status_code)
+
+#api$files$list(path = "dooley/public", responseType="df")
+#csvfile <- api$files$download(path="dooley/data/0agh7U.csv")
+#csvfile
+
+#df = read.csv2("conflicts of interest.csv")
+#df
+
+#localFilePath <- paste0(c(getwd(),"conflicts_of_interest.csv"),collapse = "/")
+#resp <- api$files$upload(path="dooley", filename=localFilePath)
+#resp
+
+
+```
+
+
+

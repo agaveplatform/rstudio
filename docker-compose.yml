@@ -1,0 +1,24 @@
+version: '2'
+
+volumes:
+  training-volume:
+
+services:
+  rstudio:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: agaveplatform/rstudio:3.4.3
+    restart: on-failure
+    environment:
+      - "ROOT=TRUE"
+      - "AGAVE_USERNAME=${AGAVE_USERNAME}"
+      - "AGAVE_PASSWORD=${AGAVE_PASSWORD}"
+      - "AGAVE_TENANT=${AGAVE_TENANT}"
+      - "AGAVE_CACHE_DIR=/home/rstudio/work/.agave"
+      - "S6_KEEP_ENV=1"
+    ports:
+      - "8787:8787"
+    volumes:
+      - training-volume:/home/rstudio/work
+      - .:/home/rstudio/data
