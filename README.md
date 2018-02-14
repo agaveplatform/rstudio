@@ -64,7 +64,7 @@ with `AGAVE_`. Any variables it finds will be copied to your `~/.Renviron` file
 and made available in your RStudio session environment. Thus, by setting the
 AGAVE_USERNAME, AGAVE_PASSWORD, and AGAVE_TENANT variables in your container
 environment, you will be able to start interacting with the Agave Platform
-without having to deal with authentication, client key management, etc. in the
+without having to deal with authentication, client key management, etc. in theå
 CLI or any of the Agave SDK you use.
 
 The docker compose file included in this repository will look for the
@@ -76,9 +76,8 @@ below.
 
 | Name                                        | Description                                                                                                                      |
 |---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| =======================================     | ==============================                                                                                                   |
 | AGAVE_ACCESS_TOKEN                          | OAuth2 bearer token returned from the tokens API                                                                                 |
-| AGAVE_BASE                                  | Base URL to the tenant to which you would like to connect.                                                                       |
+| AGAVE_BASE                                  | Base URL to the tenant to which you would like toå connect.                                                                       |
 | AGAVE_CACHE_DIR                             | The irectory where the auth cache file created by the CLI an SDK should be stored. Defaults to $HOME/.agave                      |
 | AGAVE_CACHE_VAR                             | The prefix used on all keys when caching session data.                                                                           |
 | AGAVE_CLIENT_KEY                            | The API client key used to obtain and refresh auth tokens.                                                                       |
