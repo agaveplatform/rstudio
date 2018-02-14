@@ -1,0 +1,52 @@
+---
+title: "Data Management With The Agave R SDK"
+output:
+  html_document:
+    df_print: paged
+---
+
+# Notebook installation  
+
+Please run this notebook to completion to install the latest version of the
+tutorial notebooks on this server.
+
+```{bash}
+
+# setting up a temp directory to checkout the git repository
+export GIT_NOTEBOOKS_FOLDER="$HOME/notebooks-$(date +%s)"
+echo $GIT_NOTEBOOKS_FOLDER
+
+# check out the git repository
+git clone --depth 1 https://github.com/agaveplatform/notebooks.git $GIT_NOTEBOOKS_FOLDER
+
+# the latest notebooks should all be present
+find $GIT_NOTEBOOKS_FOLDER -name "*.Rmd"
+
+# list current tutorials
+cd $HOME/notebooks
+find . -name "*.Rmd"
+
+# check that the checkout completed
+if [[ -d $GIT_NOTEBOOKS_FOLDER ]]; then
+    # backup current tutorials
+    mkdir -p "$HOME/work/notebooks-backup-$(date +%s)"
+    mv $HOME/notebooks/* $HOME/work/notebooks-backup-$(date +%s)/
+​
+    # copy the checkout to the server root
+    for i in `ls $GIT_NOTEBOOKS_FOLDER`;
+    do
+      cp -rf "$GIT_NOTEBOOKS_FOLDER/$i" $HOME/notebooks/
+    done
+
+    echo "Notebooks successfully installed."
+else
+    echo "Notebooks checkout directory is missing. No tutorials will be updated"
+fi
+
+```
+You can begin your first tutorial by running the next cell
+
+```{r}
+setwd(file
+file.edit('Introduction.R')
+```

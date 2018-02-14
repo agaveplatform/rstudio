@@ -19,14 +19,15 @@ The only requirement is [Docker](https://docs.docker.com/engine/installation/) a
 
 ## Building
 
-T build the image, you have two options. First is to run the Docker build
-command manually:
+You can build the Docker image either manually or using the included
+`docker-compose.yml` file.  To build manually, run the following command:
 
 ```Bash
 docker build -it --rm -t rstudio:2.4.3 .
 ```
 
-Second is to use the `docker-compose.yml file to do it for you.  
+To build with Docker Compose, run the following command from the project root
+directory.
 
 ```
 docker-compose build
