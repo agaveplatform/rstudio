@@ -12,13 +12,16 @@ services:
     restart: on-failure
     environment:
       - "ROOT=TRUE"
+      - "USER=${AGAVE_USERNAME}"
+      - "PASSWORD=${AGAVE_PASSWORD}"
       - "AGAVE_USERNAME=${AGAVE_USERNAME}"
       - "AGAVE_PASSWORD=${AGAVE_PASSWORD}"
       - "AGAVE_TENANT=${AGAVE_TENANT}"
-      - "AGAVE_CACHE_DIR=/home/rstudio/work/.agave"
+      - "AGAVE_TENANT_BASE_URL=${AGAVE_TENANT_BASEURL}"
+      - "AGAVE_CACHE_DIR=/home/${AGAVE_USERNAME}/work/.agave"
       - "S6_KEEP_ENV=1"
     ports:
-      - "8787:8787"
+      - "8788:8787"
     volumes:
       - training-volume:/home/rstudio/work
-      - .:/home/rstudio/data
+      - .:/home/${AGAVE_USERNAME}/data

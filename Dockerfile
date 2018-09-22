@@ -8,6 +8,7 @@ USER root
 RUN apt-get update && \
     apt-get install -y libssh2-1-dev zlib1g-dev libxml2-dev && \
     Rscript -e 'if(!require(devtools)) { install.packages("devtools") }' \
+            -e 'if(!require(testthat)) { install.packages("testthat") }' \
             -e 'if(!require(xml2)) { install.packages("xml2") }' \
             -e 'if(!require(plyr)) { install.packages("plyr") }' \
             -e 'if(!require(oxygen2)) { install.packages("roxygen2") }'
@@ -16,28 +17,25 @@ RUN apt-get update && \
 RUN apt-get install -y jq python-pip && \
     pip install agavepy
 
+
+# Add example notebooks, data, etc
+
+# Copy user configuration file here to force the sdk to be rebuilt.
+COPY userconf-env /etc/cont-init.d/userconf-env
+
 # Add Agave R SDK
 RUN git clone --depth=1 https://github.com/agaveplatform/r-sdk.git /home/rstudio/src/rAgave && \
-    Rscript -e 'devtools::install("/home/rstudio/src/rAgave")' \
+    Rscript -e 'devtools::install("/home/rstudio/src/rAgave"  )' \
             -e 'devtools::document("/home/rstudio/src/rAgave")' \
             -e 'devtools::install("/home/rstudio/src/rAgave")' && \
     echo '\n\
 \n# Add devtools and rAgave SDK to the default environment \
 \nlibrary(devtools) \
-\nlibrary(rAgave) \
-\nlibrary(plyr) \
 \n' >> /usr/local/lib/R/etc/Rprofile.site
 
-# Add Agave CLI
-RUN git clone --depth=1 -b develop https://github.com/agaveplatform/agave-cli.git /home/rstudio/src/cli && \
-    echo 'export PATH=$PATH:/home/rstudio/src/cli/bin' >> /home/rstudio/.bashrc && \
-    echo 'export AGAVE_JSON_PARSER=jq' >> /home/rstudio/.bashrc
-
-# Add example notebooks, data, etc
-COPY notebooks /home/rstudio/notebooks
 
 #COPY docker_entrypoint.sh /docker_entrypoint.sh
-COPY userconf-env /etc/cont-init.d/userconf-env
+
 RUN chown -R rstudio /home/rstudio && \
     chmod +x /etc/cont-init.d/userconf-env
 

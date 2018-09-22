@@ -2,6 +2,9 @@
 
 AGAVE_VARS="$(env | grep '^AGAVE_')"
 
+USER=${USER:-$AGAVE_USERNAME}
+PASSWORD=${PASSWORD:-$AGAVE_PASSWORD}
+
 # adjust user home if they are using a custom user
 USER_HOME=/home/rstudio
 if [ -n "$USER" ]; then
@@ -10,10 +13,10 @@ fi
 
 # if there are Agave environment variables set,
 # clear all Agave environment variables from the
-# current ~/.Renviron file and add th ones
-# from their environment
+# current ~/.Renviron file and add the ones
+# from the current environment
 if [ -n "$AGAVE_VARS" ]; then
-  # if the file exists, clear out the old, add the new
+  # if the file exists, clear out the old vars, add the new
   if [ -e "$USER_HOME/.Renviron" ]; then
     sed -i 's/^AGAVE.*//g' $USER_HOME/.Renviron
   fi
@@ -27,8 +30,31 @@ if [ -n "$AGAVE_VARS" ]; then
     echo "$i" >> $USER_HOME/.Renviron
   done
 
-  ls -al $USER_HOME/.Renviron
+  #ls -al $USER_HOME/.Renviron
 
 else
   echo "AGAVE_NOOP=1"
+fi
+
+
+SHINY_CONNECT_VARS="$(env | grep '^SHINY_CONNECT_')"
+
+# if there are Shiny Connect environment variables set,
+# clear all Shiny Connect environment variables from the
+# current ~/.Renviron file and add the ones
+# from the current environment
+if [ -n "$SHINY_CONNECT_VARS" ]; then
+
+  # if the file exists, clear out the old vars, add the new
+  if [ -e "$USER_HOME/.Renviron" ]; then
+    sed -i 's/^SHINY_CONNECT_VARS.*//g' $USER_HOME/.Renviron
+  fi
+
+  touch $USER_HOME/.Renviron
+
+  for i in `env | grep '^SHINY_CONNECT_'`; do
+    echo "export $i"
+    echo "$i" >> $USER_HOME/.Renviron
+  done
+
 fi
